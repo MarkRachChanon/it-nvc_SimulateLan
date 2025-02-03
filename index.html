@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LAN Cable Wiring Simulator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .wire-container { display: flex; justify-content: center; margin: 20px; }
+        .wire { width: 40px; height: 100px; border: 1px solid black; margin: 5px; cursor: grab; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; }
+        .slot { width: 40px; height: 100px; border: 2px dashed gray; margin: 5px; }
+        .correct { background-color: lightgreen; }
+        .wrong { background-color: lightcoral; }
+    </style>
+</head>
+<body>
+    <h1>LAN Cable Wiring Simulator</h1>
+    <p>Select a wiring standard and drag the wires to match.</p>
+    
+    <label for="wiring-standard">Choose Wiring Standard:</label>
+    <select id="wiring-standard" onchange="updateCorrectOrder()">
+        <option value="T568A">T568A</option>
+        <option value="T568B">T568B</option>
+    </select>
+    
+    <div class="wire-container" id="wire-bank">
+        <div class="wire" style="background: linear-gradient(white, orange);" draggable="true" id="wire1">White-Orange</div>
+        <div class="wire" style="background-color: orange;" draggable="true" id="wire2">Orange</div>
+        <div class="wire" style="background: linear-gradient(white, green);" draggable="true" id="wire3">White-Green</div>
+        <div class="wire" style="background-color: blue;" draggable="true" id="wire4">Blue</div>
+        <div class="wire" style="background: linear-gradient(white, blue);" draggable="true" id="wire5">White-Blue</div>
+        <div class="wire" style="background-color: green;" draggable="true" id="wire6">Green</div>
+        <div class="wire" style="background: linear-gradient(white, brown);" draggable="true" id="wire7">White-Brown</div>
+        <div class="wire" style="background-color: brown;" draggable="true" id="wire8">Brown</div>
+    </div>
+    
+    <h2>Arrange in this order:</h2>
+    <div class="wire-container" id="slot-container">
+        <div class="slot" id="slot1"></div>
+        <div class="slot" id="slot2"></div>
+        <div class="slot" id="slot3"></div>
+        <div class="slot" id="slot4"></div>
+        <div class="slot" id="slot5"></div>
+        <div class="slot" id="slot6"></div>
+        <div class="slot" id="slot7"></div>
+        <div class="slot" id="slot8"></div>
+    </div>
+    
+    <button onclick="checkWiring()">Check Wiring</button>
+    <p id="result"></p>
+
+    <script>
+        let correctOrder = [];
+        
+        function updateCorrectOrder() {
+            const standard = document.getElementById("wiring-standard").value;
+            if (standard === "T568A") {
+                correctOrder = ["wire3", "wire6", "wire1", "wire4", "wire5", "wire2", "wire7", "wire8"];
+            } else {
+                correctOrder = ["wire1", "wire2", "wire3", "wire4", "wire5", "wire6", "wire7", "wire8"];
+            }
+        }
+        
+        updateCorrectOrder();
+        
+        let draggedWire = null;
+        
+        document.querySelectorAll('.wire').forEach(wire => {
+            wire.addEventListener('dragstart', (e) => {
+                draggedWire = e.target;
+            });
+        });
+        
+        document.querySelectorAll('.slot').forEach(slot => {
+            slot.addEventListener('dragover', (e) => {
+                e.preventDefault();
+            });
+            slot.addEventListener('drop', (e) => {
+                if (draggedWire) {
+                    e.target.appendChild(draggedWire);
+                }
+            });
+        });
+        
+        function checkWiring() {
+            let isCorrect = true;
+            document.querySelectorAll('.slot').forEach((slot, index) => {
+                if (slot.children.length === 1 && slot.children[0].id === correctOrder[index]) {
+                    slot.classList.add('correct');
+                    slot.classList.remove('wrong');
+                } else {
+                    slot.classList.add('wrong');
+                    slot.classList.remove('correct');
+                    isCorrect = false;
+                }
+            });
+            document.getElementById('result').innerText = isCorrect ? "Correct wiring!" : "Incorrect wiring, try again!";
+        }
+    </script>
+</body>
+</html>
