@@ -800,17 +800,8 @@
   .aspect-square {
     aspect-ratio: 1 / 1;
   }
-  .h-12 {
-    height: calc(var(--spacing) * 12);
-  }
-  .h-32 {
-    height: calc(var(--spacing) * 32);
-  }
   .h-52 {
     height: calc(var(--spacing) * 52);
-  }
-  .h-64 {
-    height: calc(var(--spacing) * 64);
   }
   .h-screen {
     height: 100vh;
@@ -823,9 +814,6 @@
   }
   .min-h-screen {
     min-height: 100vh;
-  }
-  .w-1 {
-    width: calc(var(--spacing) * 1);
   }
   .w-1\/2 {
     width: calc(1/2 * 100%);
@@ -2318,6 +2306,13 @@
       }
     }
   }
+}
+@font-face {
+  font-family: 'Kanit';
+  src: url('/fonts/Kanit-Regular.ttf') format('truetype');
+}
+* {
+  font-family: 'Kanit', sans-serif;
 }
 @keyframes spin {
   to {
